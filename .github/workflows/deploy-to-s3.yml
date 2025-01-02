@@ -62,7 +62,7 @@ jobs:
       # 7. .jar 파일 업로드
       - name: Upload JAR files to S3
         run: |
-          aws s3 sync build/libs/ s3://$BUCKET_NAME/ \
+          aws s3 sync ${{ env.GRADLEW_DIR }}/build/libs/ s3://$BUCKET_NAME/ \
             --exclude "*" \
             --include "*.jar"
 
