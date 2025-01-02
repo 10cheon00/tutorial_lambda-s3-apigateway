@@ -6,11 +6,11 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
-public class AppTest {
+public class SimpleLambdaHandlerTest {
   @Test
   public void successfulResponse() {
-    App app = new App();
-    APIGatewayProxyResponseEvent result = app.handleRequest(null, null);
+    SimpleLambdaHandler simpleLambdaHandler = new SimpleLambdaHandler();
+    APIGatewayProxyResponseEvent result = simpleLambdaHandler.handleRequest(null, null);
     assertEquals(200, result.getStatusCode().intValue());
     assertEquals("application/json", result.getHeaders().get("Content-Type"));
     String content = result.getBody();
