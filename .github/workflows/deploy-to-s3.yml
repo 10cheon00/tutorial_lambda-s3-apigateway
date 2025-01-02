@@ -51,5 +51,5 @@ jobs:
         run: |
           aws s3 sync build/libs/ s3://$BUCKET_NAME/ \
             --exclude "*" \
-            --include "*.jar"  # 필요한 파일 형식만 업로드
+            --include "*.jar" \
             --include "index.html"
