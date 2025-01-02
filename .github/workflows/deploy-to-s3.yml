@@ -51,5 +51,9 @@ jobs:
         run: |
           aws s3 sync build/libs/ s3://$BUCKET_NAME/ \
             --exclude "*" \
-            --include "*.jar" \
-            --include "index.html"
+            --include "*.jar"
+      
+      # 8. index.html 업로드
+      - name: Upload index.html to S3
+        run: |
+          aws s3 cp index.html s3://$BUCKET_NAME/
