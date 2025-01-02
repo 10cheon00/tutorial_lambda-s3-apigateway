@@ -24,7 +24,7 @@ jobs:
             exit 1
           fi
           echo "GRADLEW_DIR=$GRADLEW_DIR" >> $GITHUB_ENV
-          cd "$GRADLEW_DIR"
+          cd $GRADLEW_DIR
 
       # +Java 설정 (Gradle을 사용하므로 필요)
       - name: Set up JDK
