@@ -1,0 +1,54 @@
+name: Build and Deploy to S3
+
+on:
+  push:
+    branches:
+      - main  # main 브랜치에 푸시될 때 작동
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. GitHub 리포지토리 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. Java 설정 (Gradle을 사용하므로 필요)
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'  # 프로젝트에 맞는 Java 버전 설정
+
+      # 3. Gradle 캐싱 (빌드 속도 향상)
+      - name: Cache Gradle packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 4. Gradle 빌드
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      # 5. AWS CLI 설정
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2  # 지역에 맞게 변경
+
+      # 6. 환경 변수에서 S3 버킷 이름 가져오기
+      - name: Export S3 Bucket Name
+        run: echo "BUCKET_NAME=${{ secrets.S3_BUCKET_NAME }}" >> $GITHUB_ENV
+
+      # 7. S3로 파일 업로드
+      - name: Upload to S3
+        run: |
+          aws s3 sync build/libs/ s3://$BUCKET_NAME/ \
+            --exclude "*" \
+            --include "*.jar"  # 필요한 파일 형식만 업로드
