@@ -3,9 +3,9 @@ package org.example;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 
-public class SimpleLambdaHandler implements RequestHandler<String, String> {
+public class SimpleLambdaHandler implements RequestHandler<RequestBody, String> {
     @Override
-    public String handleRequest(String s, Context context) {
-        return "Test";
+    public String handleRequest(RequestBody requestBody, Context context) {
+        return requestBody.text();
     }
 }
