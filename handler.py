@@ -35,5 +35,5 @@ def lambda_handler(event, context):
         return {
             'statusCode': statusCode,
             'headers': 'application/json',
-            'body': json.dumps(response_body)
+            'body': json.dumps(response_body, ensure_ascii=False).encode("utf8")
         }
