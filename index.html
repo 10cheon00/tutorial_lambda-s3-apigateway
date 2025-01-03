@@ -1,22 +1,69 @@
 <html>
   <head>
     <meta charset="UTF-8" />
+    <link href="./index.css" rel="stylesheet" />
+    <script>
+      async function sendRequest() {
+          const textElement = document.getElementById('text');
+          const resultElement = document.getElementById('result');
+          const taretLanguageElement = document.getElementById('target-language')
+          const textValue = textElement.value;
+          const targetLanguageCode = taretLanguageElement.value;
+          const body = {
+            "target_language": targetLanguageCode,
+            "text": textValue
+          }
+          try {
+              const response = await fetch('https://6vyjvj5p6d.execute-api.ap-northeast-2.amazonaws.com/test', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(body)
+              });
+
+              if (response.ok) {
+                  const responseData = await response.json();
+                  resultElement.value = responseData.result || '응답 없음';
+              } else {
+                  resultElement.value = '오류 발생: ' + response.status;
+              }
+          } catch (error) {
+              resultElement.value = '요청 실패: ' + error.message;
+          }
+      }
+  </script>
   </head>
   <body>
-    <p>참고한 사이트들</p>
-    <ul>
-      <li>
-        <a href="https://longtermsad.tistory.com/44">
-          정적 웹 사이트 호스팅 방법</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://velog.io/@shinnh2/Github-Actions-AWS-S3-yml#span-stylecolor12b8863span-github%ED%8F%B4%EB%8D%94%EC%97%90-yml%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1"
-          >[코딩노트] Github Actions, AWS S3, yml을 사용해 클라이언트
-          배포하기</a
-        >
-      </li>
-    </ul>
-  </body>
+    <label for="text">입력:</label>
+    <textarea type="text" id="text" placeholder="문장을 입력하세요"></textarea>
+    <select name="언어" id="target-language">
+      <option value="eu">English</option>
+      <option value="es">Spanish</option>
+      <option value="ja">Japanese</option>
+      <option value="zh">Chinese</option>
+      <option value="kn">Korean</option>
+    </select>
+    <button id="submit" onclick="sendRequest()">전송</button>
+    <br><br>
+    <label for="result">결과:</label>
+    <textarea type="text" id="result" readonly placeholder="번역 결과가 여기에 표시됩니다"></textarea>
+    <footer>
+      <p>참고한 사이트들</p>
+      <ul>
+        <li>
+          <a href="https://longtermsad.tistory.com/44">
+            정적 웹 사이트 호스팅 방법</a
+            >
+          </li>
+          <li>
+            <a
+            href="https://velog.io/@shinnh2/Github-Actions-AWS-S3-yml#span-stylecolor12b8863span-github%ED%8F%B4%EB%8D%94%EC%97%90-yml%ED%8C%8C%EC%9D%BC-%EC%9E%91%EC%84%B1"
+            >[코딩노트] Github Actions, AWS S3, yml을 사용해 클라이언트
+            배포하기</a
+            >
+          </li>
+        </ul>
+      </footer>
+    </body>
 </html>
