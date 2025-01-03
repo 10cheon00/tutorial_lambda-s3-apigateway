@@ -31,7 +31,8 @@ jobs:
         run: echo "BUCKET_NAME=${{ vars.S3_BUCKET_NAME }}" >> $GITHUB_ENV
 
       # 5. index.html 업로드
-      - name: Upload index.html and handler.py to S3
+      - name: Upload page files and handler.py to S3
         run: |
           aws s3 cp index.html s3://$BUCKET_NAME/
+          aws s3 cp index.css s3://$BUCKET_NAME/
           aws s3 cp handler.py.zip s3://$BUCKET_NAME/
